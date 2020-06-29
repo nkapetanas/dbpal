@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import { HttpClient, HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
@@ -15,11 +15,13 @@ import {DialogModule} from 'primeng/dialog';
 import {PanelModule} from 'primeng/panel';
 import {PaginatorModule} from 'primeng';
 import {HomePatientService} from './home/home.service';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    PagenotfoundComponent
   ],
   imports: [
     BrowserModule,
