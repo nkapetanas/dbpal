@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:8.0.17
+    container_name: dbpal_container
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dbpal
+
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
+    restart: always
+#  dj:
+#    container_name: dj
+#    build: django
+#    command: python manage.py runserver 0.0.0.0:80
+#    volumes:
+#      - ./django:/code
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - db
+#    environment:
+#      - DJANGO_SETTINGS=dev
+#  healthcheck:
+#    test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+#    timeout: 20s
+#    retries: 10
+#  ng:
+#    container_name: ng
+#    build: angular
+#    ports:
+#      - "8080:80"

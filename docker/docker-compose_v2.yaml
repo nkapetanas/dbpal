@@ -1,0 +1,11 @@
+version: "3"
+
+services:     
+  dj:
+    container_name: dj
+    build: django
+    command: python manage.py runserver 0.0.0.0:80
+    volumes:
+      - ./django:/code
+    ports:
+      - "80:80"
