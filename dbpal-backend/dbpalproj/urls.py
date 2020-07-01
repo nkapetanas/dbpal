@@ -22,7 +22,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/patients/', dbpal_views.PatientList.as_view(), name='patient-list'),
-    url(r'^getData/', get_data),
-    url(r'^.*', TemplateView.as_view(template_name="index.html"), name="home")
+    path('api/patients/', dbpal_views.PatientsDetails.as_view(), name='patient-list'),
+    # url(r'^getData/', get_data),
+    # url(r'^.*', TemplateView.as_view(template_name="index.html"), name="home")
 ]
