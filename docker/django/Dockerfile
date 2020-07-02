@@ -3,7 +3,7 @@ FROM python:3
 # Set environment variables
 ENV PYTHONUNBUFFERED 1
 
-COPY ../requirements.txt /
+COPY ./requirements.txt /
 
 # Install dependencies.
 RUN pip install -r /requirements.txt
@@ -13,7 +13,7 @@ RUN mkdir /code
 WORKDIR /code
 
 # Copy project code.
-COPY .. /code/
+COPY . /code/
 
 EXPOSE 8080
 

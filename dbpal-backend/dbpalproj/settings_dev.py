@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')$6ehykx5%u)j0!(p^qi%w-ws0i13_s%x#1e3k43%jm=zxsd%a'
+# SECRET_KEY = ')$6ehykx5%u)j0!(p^qi%w-ws0i13_s%x#1e3k43%jm=zxsd%a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'dbpalproj.urls'
+ROOT_URLCONF = 'dbpal-backend.dbpalproj.urls'
 
 TEMPLATES = [
     {
@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dbpalproj.wsgi.application'
+WSGI_APPLICATION = 'dbpal-backend.dbpalproj.wsgi.application'
 
 
 # Database
@@ -99,20 +99,20 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+#     },
+#     {
+#         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+#     },
+# ]
 
 
 # Internationalization
@@ -139,37 +139,47 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8080',
 )
 
-## Add JWT authentication to default authentication classes
+# ## Add JWT authentication to default authentication classes
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAuthenticated', # All views have this permission active (unless overwritten).
+#     ),
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+#     ),
+# }
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', # All views have this permission active (unless overwritten).
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-       'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+       'rest_framework.authentication.BasicAuthentication',
+       'rest_framework.authentication.SessionAuthentication',
     ),
 }
 
-AUTH0_DOMAIN = 'YOUR_AUTH0_DOMAIN'
-API_IDENTIFIER = 'http://djangoangularapi'
-PUBLIC_KEY = None
-JWT_ISSUER = None
-
-if AUTH0_DOMAIN:
-    jsonurl = request.urlopen('https://' + AUTH0_DOMAIN + '/.well-known/jwks.json')
-    jwks = json.loads(jsonurl.read().decode('utf-8'))
-    cert = '-----BEGIN CERTIFICATE-----\n' + jwks['keys'][0]['x5c'][0] + '\n-----END CERTIFICATE-----'
-    certificate = load_pem_x509_certificate(cert.encode('utf-8'), default_backend())
-    PUBLIC_KEY = certificate.public_key()
-    JWT_ISSUER = 'https://' + AUTH0_DOMAIN + '/'
-
-def jwt_get_username_from_payload_handler(payload):
-    return 'auth0user'
-
-JWT_AUTH = {
-    'JWT_PAYLOAD_GET_USERNAME_HANDLER': jwt_get_username_from_payload_handler,
-    'JWT_PUBLIC_KEY': PUBLIC_KEY,
-    'JWT_ALGORITHM': 'RS256',
-    'JWT_AUDIENCE': API_IDENTIFIER,
-    'JWT_ISSUER': JWT_ISSUER,
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-}
+# AUTH0_DOMAIN = 'YOUR_AUTH0_DOMAIN'
+# API_IDENTIFIER = 'http://djangoangularapi'
+# PUBLIC_KEY = None
+# JWT_ISSUER = None
+#
+# if AUTH0_DOMAIN:
+#     jsonurl = request.urlopen('https://' + AUTH0_DOMAIN + '/.well-known/jwks.json')
+#     jwks = json.loads(jsonurl.read().decode('utf-8'))
+#     cert = '-----BEGIN CERTIFICATE-----\n' + jwks['keys'][0]['x5c'][0] + '\n-----END CERTIFICATE-----'
+#     certificate = load_pem_x509_certificate(cert.encode('utf-8'), default_backend())
+#     PUBLIC_KEY = certificate.public_key()
+#     JWT_ISSUER = 'https://' + AUTH0_DOMAIN + '/'
+#
+# def jwt_get_username_from_payload_handler(payload):
+#     return 'auth0user'
+#
+# JWT_AUTH = {
+#     'JWT_PAYLOAD_GET_USERNAME_HANDLER': jwt_get_username_from_payload_handler,
+#     'JWT_PUBLIC_KEY': PUBLIC_KEY,
+#     'JWT_ALGORITHM': 'RS256',
+#     'JWT_AUDIENCE': API_IDENTIFIER,
+#     'JWT_ISSUER': JWT_ISSUER,
+#     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+# }
