@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'dbpal-backend.dbpalproj.urls'
+ROOT_URLCONF = 'dbpalproj.urls'
 
 TEMPLATES = [
     {
@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'dbpal-backend.dbpalproj.wsgi.application'
+WSGI_APPLICATION = 'dbpalproj.wsgi.application'
 
 
 # Database

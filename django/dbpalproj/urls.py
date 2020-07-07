@@ -17,12 +17,14 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 
-import views as dbpal_views
+
 from django.views.generic import TemplateView
+
+from dbpalapi.views import PatientsDetails
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/patients/', dbpal_views.PatientsDetails.as_view(), name='patient-list'),
+    path('api/patients/', PatientsDetails.as_view(), name='patient-list'),
     # url(r'^getData/', get_data),
     # url(r'^.*', TemplateView.as_view(template_name="index.html"), name="home")
 ]
