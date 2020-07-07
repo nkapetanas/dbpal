@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:5.7.30
+    container_name: dbpal_container
+    command: "--innodb_use_native_aio=0"
+    environment:
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dbpal
+
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
+      - ./data-conf/conf:/etc/mysql/conf.d
+    restart: always
+
+#  dj:
+#    container_name: dj
+#    build: django
+#    command: python3 django/manage.py runserver 0.0.0.0:80
+#    volumes:
+#      - .:/code
+#    ports:
+#      - "80:80"
+#   depends_on:
+#      - db
+#    environment:
+#      - DJANGO_SETTINGS=dev
+#  ng:
+#    container_name: ng
+#    build: angular
+#    ports:
+#      - "8080:80"
