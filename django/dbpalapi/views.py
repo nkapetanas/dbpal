@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from .models import Patients
 from django.http import Http404
@@ -6,6 +6,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import PatientSerializer
+
+import sys
+sys.path.append('../../dbpalcore/preprocessor/preprocessor')
 
 from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
@@ -37,9 +40,11 @@ class PatientsDetails(APIView):
         serializer = PatientSerializer(patients, many=True)
         return Response(serializer.data)
 
-    def get_object(self, task_id):
+    def getData(self, searchInput):
         try:
-            return Patients.objects.get(pk=task_id)
+
+            return HttpResponse('The input value is {}'.format(searchInput))
+            # return Patients.objects.get(pk=task_id)
         except Patients.DoesNotExist:
             raise Http404
 

@@ -25,6 +25,7 @@ from dbpalapi.views import PatientsDetails
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/patients/', PatientsDetails.as_view(), name='patient-list'),
+    path('api/patients/getData/<slug:searchInput>/', PatientsDetails.getData, name='patient-list'),
     # url(r'^getData/', get_data),
     # url(r'^.*', TemplateView.as_view(template_name="index.html"), name="home")
 ]
