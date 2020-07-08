@@ -13,7 +13,7 @@ class Patients(models.Model):
 
     # Meta data about the database table.
     class Meta:
-        db_table = 'dbpal'
+        db_table = 'patients'
 
         # Set default ordering
         ordering = ['id']
