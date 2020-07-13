@@ -17,76 +17,76 @@
 </div>
 
 
-<!--<div class="card">-->
-<!--  <div class="card-block">-->
-<!--    <p-panel #dtpanel>-->
-<!--      <p-table id="patientsDataTable" [value]="patients" [rows]="10" #dt>-->
-<!--        <ng-template pTemplate="caption">-->
-<!--          <div class="tableCaption">-->
-<!--            <span>Patients Data</span>-->
-<!--          </div>-->
-<!--        </ng-template>-->
-<!--        <ng-template pTemplate="emptymessage">-->
-<!--          <tr>-->
-<!--            <td [attr.colspan]="7">-->
-<!--              <span>No data found.</span>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--        </ng-template>-->
-<!--        <ng-template pTemplate="header">-->
-<!--          <tr>-->
-<!--            <th style="width: 100%;">-->
-<!--              <span>Id</span>-->
-<!--            </th>-->
-<!--            <th style="width: 100%;">-->
-<!--              <span>First Name</span>-->
-<!--            </th>-->
-<!--            <th style="width: 100%;">-->
-<!--              <span>Last Name</span>-->
-<!--            </th>-->
-<!--            <th style="width: 100%;">-->
-<!--              <span>Diagnosis</span>-->
-<!--            </th>-->
-<!--            <th style="width: 100%;">-->
-<!--              <span>Gender</span>-->
-<!--            </th>-->
-<!--            <th style="width: 100%;">-->
-<!--              <span>Length Of Stay</span>-->
-<!--            </th>-->
-<!--            <th style="width: 100%;">-->
-<!--              <span>Age</span>-->
-<!--            </th>-->
-<!--          </tr>-->
-<!--        </ng-template>-->
-<!--        <ng-template pTemplate="body" let-rowData>-->
-<!--          <tr>-->
-<!--            <td>-->
-<!--              <span>{{rowData.id}}</span>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <span>{{rowData.firstName}}</span>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <span>{{rowData.lastName}}</span>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <span>{{rowData.diagnosis}}</span>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <span>{{rowData.gender}}</span>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <span>{{rowData.lengthOfStay}}</span>-->
-<!--            </td>-->
-<!--            <td>-->
-<!--              <span>{{rowData.age}}</span>-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--        </ng-template>-->
-<!--      </p-table>-->
-<!--    </p-panel>-->
-<!--  </div>-->
-<!--</div>-->
+<div class="card" style="margin-top: 3em;">
+ <div class="card-block">
+   <p-panel #dtpanel>
+     <p-table id="patientsDataTable" [value]="patients" [rows]="10" #dt>
+       <ng-template pTemplate="caption">
+         <div class="tableCaption">
+           <span>Patients Data</span>
+         </div>
+       </ng-template>
+       <ng-template pTemplate="emptymessage">
+         <tr>
+           <td [attr.colspan]="7">
+             <span>No data found.</span>
+           </td>
+         </tr>
+       </ng-template>
+       <ng-template pTemplate="header">
+         <tr>
+           <th style="width: 100%;">
+             <span>Id</span>
+           </th>
+           <th style="width: 100%;">
+             <span>First Name</span>
+           </th>
+           <th style="width: 100%;">
+             <span>Last Name</span>
+           </th>
+           <th style="width: 100%;">
+             <span>Diagnosis</span>
+           </th>
+           <th style="width: 100%;">
+             <span>Gender</span>
+           </th>
+           <th style="width: 100%;">
+             <span>Length Of Stay</span>
+           </th>
+           <th style="width: 100%;">
+             <span>Age</span>
+           </th>
+         </tr>
+       </ng-template>
+       <ng-template pTemplate="body" let-rowData>
+         <tr>
+           <td>
+             <span>{{rowData.id}}</span>
+           </td>
+           <td>
+             <span>{{rowData.firstName}}</span>
+           </td>
+           <td>
+             <span>{{rowData.lastName}}</span>
+           </td>
+           <td>
+             <span>{{rowData.diagnosis}}</span>
+           </td>
+           <td>
+             <span>{{rowData.gender}}</span>
+           </td>
+           <td>
+             <span>{{rowData.lengthOfStay}}</span>
+           </td>
+           <td>
+             <span>{{rowData.age}}</span>
+           </td>
+         </tr>
+       </ng-template>
+     </p-table>
+   </p-panel>
+ </div>
+</div>
 
 <div>
   <p>Response: {{sqlResponse}}</p>

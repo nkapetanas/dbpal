@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {HomePatientService} from './home.service';
 import {Patient} from './patients.model';
+import {Message} from 'primeng//api';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +21,8 @@ export class HomeComponent implements OnInit {
    */
   patients: Patient[] = [];
 
-  constructor(private homePatientService: HomePatientService) {
+  constructor(private homePatientService: HomePatientService,
+    private messageService: MessageService) {
   }
 
   ngOnInit(): void {
@@ -42,7 +45,21 @@ export class HomeComponent implements OnInit {
   }
 
   searchPatientsResultsMock() {
-
+    let input= this.filter;
+    if(input){
+      this.homePatientService.getPetientsDataMock(input).subscribe((response) => {
+        this.mapResult(response);
+      },
+        (error) => {
+          this.messageService.add({severity:'danger', summary:'Service Message', detail:'The patients\' data could not be loaded.'});
+          console.log(error);
+        }
+      );
+    }
+    else {
+      this.messageService.add({severity:'danger', summary:'Validation Error', detail:'Please check all required fields, format and length.'});
+      
+    }
   }
 
   /**

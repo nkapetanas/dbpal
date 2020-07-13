@@ -13,8 +13,11 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {CheckboxModule} from 'primeng/checkbox';
 import {DialogModule} from 'primeng/dialog';
 import {PanelModule} from 'primeng/panel';
-import {PaginatorModule} from 'primeng';
+import {PaginatorModule, MessageService} from 'primeng';
 import {HomePatientService} from './home/home.service';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,7 @@ import {HomePatientService} from './home/home.service';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     AccordionModule,
     MenuModule,
@@ -36,8 +40,10 @@ import {HomePatientService} from './home/home.service';
     HttpClientModule,
     HttpClientXsrfModule,
     PaginatorModule,
+    MessagesModule,
+    MessageModule
   ],
-  providers: [HomePatientService],
+  providers: [HomePatientService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

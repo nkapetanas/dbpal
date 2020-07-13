@@ -57,7 +57,7 @@ export class Rest {
       .get(Consts.API_REL_PATH + resource + '?' + new Date().toString(), {
         headers: this.getHeaders(),
         params,
-        withCredentials: true
+        withCredentials: false
       })
       .toPromise()
       .then(response => response as any)

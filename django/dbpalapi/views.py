@@ -1,5 +1,6 @@
 from django.http import JsonResponse, HttpResponse
 
+from dbpalcore.preprocessor.preprocess import *
 from .models import Patients
 from django.http import Http404
 from rest_framework.views import APIView
@@ -8,7 +9,11 @@ from rest_framework import status
 from .serializers import PatientSerializer
 
 import sys
+
+#from ..dbpalcore.preprocessor.preprocess import get_unique_db_columns
+
 sys.path.append('../../dbpalcore/preprocessor/preprocessor')
+
 
 from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
@@ -42,8 +47,13 @@ class PatientsDetails(APIView):
 
     def getData(self, searchInput):
         try:
+            unique_db_columns_names = get_unique_db_columns()
+            db_column_names = []
+            for column_name in unique_db_columns_names:
+                db_column_names.append(''.join(column_name))
 
-            return HttpResponse('The input value is {}'.format(searchInput))
+            placeholders = create_place_holders_from_db(db_column_names)
+            return HttpResponse('The input value is {}'.format(placeholders))
             # return Patients.objects.get(pk=task_id)
         except Patients.DoesNotExist:
             raise Http404
