@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {HttpParams, HttpHeaders} from '@angular/common/http';
 import {HttpClient} from '@angular/common/http';
 import {Consts} from '../../utils/consts.util';
 import {Rest} from '../../utils/rest';

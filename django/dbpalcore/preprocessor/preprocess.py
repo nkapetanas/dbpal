@@ -36,18 +36,15 @@ def get_unique_column_values(column):
 
 
 def create_place_holders_from_db(unique_db_columns):
-    placeholders = list()
+    placeholders = dict()
     for column in unique_db_columns:
-        placeholders.append(PLACEHOLDER_SIGN + column.upper())
+        placeholders[column] = PLACEHOLDER_SIGN + column.upper()
 
     return placeholders
 
 
-def get_n_grams(n, list_of_words):
-    list_of_ngrams = list()
-    for word in list_of_words:
-        list_of_ngrams.append(ngrams(word.split(), n))
-
+def get_n_grams(n, sentence):
+    return ngrams(sentence.split(), n)
 
 class Preprocessor:
     def __init__(self):
@@ -67,7 +64,7 @@ class Preprocessor:
         words = [w for w in words if not w in stop_words]
         stemmed = [porter.stem(word) for word in words]
 
-    def replace_numeric_constants_with_placeholders(self, user_input):
+def replace_numeric_constants_with_placeholders(user_input):
 
         user_input.replace('', '')
         pass
