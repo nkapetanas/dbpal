@@ -14,8 +14,6 @@ export class HomeComponent implements OnInit {
 
   filter: string;
 
-  patient: Patient;
-
   /**
    * Contains the rows of the tables
    */
@@ -30,7 +28,7 @@ export class HomeComponent implements OnInit {
 
 
   /**
-   * After the succesful completion of the rest call
+   * After the successful completion of the rest call
    * Sets the table values with the page that is retrieved
    * from the Rest
    * @param response
@@ -38,8 +36,8 @@ export class HomeComponent implements OnInit {
   mapResult(response) {
     this.patients = [];
     this.sqlResponse = '';
-    if (response && response.result.length !== 0) {
-      this.patients = response.result;
+    if (response && response.result !== 0) {
+      this.patients = response.patients;
       this.sqlResponse = response.sqlResponse;
     }
   }
@@ -47,7 +45,7 @@ export class HomeComponent implements OnInit {
   searchPatientsResultsMock() {
     let input= this.filter;
     if(input){
-      this.homePatientService.getPetientsDataMock(input).subscribe((response) => {
+      this.homePatientService.getPatientsDataMock(input).subscribe((response) => {
         this.mapResult(response);
       },
         (error) => {
@@ -58,20 +56,7 @@ export class HomeComponent implements OnInit {
     }
     else {
       this.messageService.add({severity:'danger', summary:'Validation Error', detail:'Please check all required fields, format and length.'});
-      
+
     }
-  }
-
-  /**
-   * Function that is called when the user clicks on the button 'Filter Anwenden'
-   * @param dt
-   */
-  searchPatientsResults(dt) {
-    this.homePatientService
-      .getPatientsData(this.filter)
-      .then(response => this.mapResult(response))
-      .catch(error => {
-
-      });
   }
 }

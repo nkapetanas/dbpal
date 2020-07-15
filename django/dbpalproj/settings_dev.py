@@ -143,7 +143,7 @@ SECURE_SSL_REDIRECT = False
 STATIC_URL = '/static/'
 
 CORS_ORIGIN_WHITELIST = (
-    'https://localhost:4200',
+    'http://localhost:4200',
     'https://localhost:8080',
 )
 

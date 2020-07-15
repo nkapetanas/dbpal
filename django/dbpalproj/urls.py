@@ -18,14 +18,14 @@ from django.contrib import admin
 from django.urls import path
 
 
-from django.views.generic import TemplateView
-
 from dbpalapi.views import PatientsDetails
+from dbpalapi.views import CombinedAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/patients/', PatientsDetails.as_view(), name='patient-list'),
     path('api/patients/getData/<slug:searchInput>/', PatientsDetails.getData, name='patient-list'),
+    path('api/patients/getCombinedData/<slug:searchInput>/', CombinedAPIView.getCombinedData, name='combined-list'),
     # url(r'^getData/', get_data),
     # url(r'^.*', TemplateView.as_view(template_name="index.html"), name="home")
 ]

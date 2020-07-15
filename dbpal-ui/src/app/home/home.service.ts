@@ -14,32 +14,13 @@ export class HomePatientService {
    */
   private rest: Rest;
 
-  httpOptions = {
-    headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-    })
-  };
 
   constructor(private http: HttpClient) {
     this.rest = new Rest(http);
   }
 
-  getPatientsData(pageParam: string): Promise<string> {
-    // Define the Query Parameters for the request
-    let params: HttpParams = new HttpParams();
-
-    if (pageParam !== null) {
-      params = params.set(
-        'patientQuestion',
-        encodeURIComponent(pageParam)
-      );
-    }
-
-    return this.rest.getWithParamsAsJson(Consts.PATIENTS_TABLE, params);
-  }
-
-  public getPetientsDataMock(input: String) {
-    return this.http.get<any>(`https://localhost:8080/api/patients`).pipe(
+  public getPatientsDataMock(input: string) {
+    return this.http.get<any>(Consts.API_REL_PATH + Consts.PATIENTS_TABLE_COMBINED + input).pipe(
       catchError((err) => {
         console.error(err.message);
         return throwError(err.message);

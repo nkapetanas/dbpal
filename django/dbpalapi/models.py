@@ -8,8 +8,8 @@ class Patients(models.Model):
     last_name = models.CharField(max_length=255)
     diagnosis = models.CharField(max_length=255)
     gender = models.CharField(max_length=255)
-    length_of_stay = models.IntegerField(max_length=4)
-    age = models.IntegerField(max_length=4)
+    length_of_stay = models.IntegerField()
+    age = models.IntegerField()
 
     # Meta data about the database table.
     class Meta:
