@@ -7,12 +7,12 @@ export class Patient {
   /**
    * Value of the column first_name
    */
-  firstName: string;
+  first_name: string;
 
   /**
    * Value of the column last_name
    */
-  lastName: string;
+  last_name: string;
 
   /**
    * Value of the column diagnosis
@@ -20,16 +20,16 @@ export class Patient {
   diagnosis: string;
 
   /**
-   * Value of the column first_name
+   * Value of the column gender
    */
   gender: string;
 
   /**
-   * Value of the column first_name
+   * Value of the column length_of_stay
    */
-  lengthOfStay: string;
+  length_of_stay: string;
   /**
-   * Value of the column first_name
+   * Value of the column age
    */
   age: string;
 }

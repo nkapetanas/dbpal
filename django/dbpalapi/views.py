@@ -12,8 +12,6 @@ from .serializers import PatientSerializer
 
 import sys
 
-#from ..dbpalcore.preprocessor.preprocess import get_unique_db_columns
-
 sys.path.append('../../dbpalcore/preprocessor/preprocessor')
 
 
@@ -42,7 +40,7 @@ class PatientsDetails(APIView):
         serializer = PatientSerializer(patients, many=True)
         return Response(serializer.data)
 
-    def getData(self, searchInput):
+    def getData(self, search_input):
         try:
             unique_db_columns_names = get_unique_db_columns()
             db_column_names = []
@@ -56,14 +54,19 @@ class PatientsDetails(APIView):
 
 class CombinedAPIView(APIView):
 
-    def getCombinedData(self, searchInput):
+    def getCombinedData(request):
+        searchInput = request.GET.get('searchInput')
+        preprocessor = Preprocessor()
+        users_input_cleaned = preprocessor.clean_users_input(searchInput)
+        users_input_with_placeholders = preprocessor.replace_numeric_constants_with_placeholders(users_input_cleaned)
+
         patients = Patients.objects.all()
 
         serializer = PatientSerializer(patients, many=True)
 
         context = {
             'patients': serializer.data,
-            'sqlResponse': 'SELECT * FROM PATIENTS',
+            'sqlResponse': users_input_with_placeholders,
         }
 
         data = json.dumps(context, indent=4, sort_keys=True, default=str)
