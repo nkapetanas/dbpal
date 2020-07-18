@@ -33,3 +33,9 @@ export class Patient {
    */
   age: string;
 }
+
+export class CombinedModel {
+
+  result: Patient[];
+  sqlResponse: string;
+}

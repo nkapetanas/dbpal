@@ -8,21 +8,18 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import PatientSerializer
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsCreator
+from rest_framework import generics
+from django.views.decorators.csrf import csrf_exempt
+from .utils import get_auth0_user_id_from_request
 
+from .serializers import PatientSerializer
 import sys
 
 sys.path.append('../../dbpalcore/preprocessor/preprocessor')
 
-
-from rest_framework import generics
-from django.views.decorators.csrf import csrf_exempt
-
-from .utils import get_auth0_user_id_from_request
-from .serializers import PatientSerializer
-
-from rest_framework.permissions import IsAuthenticated
-from .permissions import IsCreator
+preprocessor = Preprocessor()
 
 
 class PatientsDetails(APIView):
@@ -56,9 +53,10 @@ class CombinedAPIView(APIView):
 
     def getCombinedData(request):
         searchInput = request.GET.get('searchInput')
-        preprocessor = Preprocessor()
+
         users_input_cleaned = preprocessor.clean_users_input(searchInput)
-        users_input_with_placeholders = preprocessor.replace_numeric_constants_with_placeholders(users_input_cleaned)
+        users_input_with_placeholders = preprocessor.replace_constants_with_placeholders(users_input_cleaned)
+        users_input_with_numeric_placeholders = preprocessor.replace_numeric_constants_with_placeholders(users_input_with_placeholders)
 
         patients = Patients.objects.all()
 
@@ -66,7 +64,7 @@ class CombinedAPIView(APIView):
 
         context = {
             'patients': serializer.data,
-            'sqlResponse': users_input_with_placeholders,
+            'sqlResponse': users_input_with_numeric_placeholders,
         }
 
         data = json.dumps(context, indent=4, sort_keys=True, default=str)

@@ -5,6 +5,7 @@ import {Rest} from '../../utils/rest';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import {Patient} from "./patients.model";
+import {CombinedModel} from "./patients.model";
 
 
 @Injectable()
@@ -21,7 +22,7 @@ export class HomePatientService {
 
   public getPatientsDataMock(input: string) {
     // return this.http.get<any>(Consts.API_REL_PATH + Consts.PATIENTS_TABLE_COMBINED, {
-    return this.http.get<Patient>('http://localhost:8080/', {
+    return this.http.get<any>('http://localhost:8080/', {
       params: {
         searchInput: input
       }}).pipe(
