@@ -1,5 +1,3 @@
-from nltk.corpus import stopwords
-from nltk import ngrams
 from nltk.tokenize import word_tokenize
 from nltk.stem.porter import PorterStemmer
 import re
@@ -8,7 +6,6 @@ from django.db import connection
 
 TOKENS_ALPHANUMERIC = '[A-Za-z0-9]+(?=\\s+)'
 HTML_TAGS_REGEX = '<.*?>|&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-f]{1,6});'
-stop_words = set(stopwords.words('english'))
 porter = PorterStemmer()
 
 cursor = connection.cursor()
@@ -57,10 +54,6 @@ def get_processed_values(db_values):
     return values_list
 
 
-def get_n_grams(n, sentence):
-    return ngrams(sentence.split(), n)
-
-
 class Preprocessor:
     def __init__(self):
         self.unique_db_columns = get_unique_db_columns()
@@ -89,7 +82,6 @@ class Preprocessor:
         return " ".join(stemmed_words)
 
     def replace_constants_with_placeholders(self, user_input):
-
         if user_input is None:
             return ""
 
@@ -107,11 +99,9 @@ class Preprocessor:
             elif word in self.gender:
                 user_input = user_input.replace(word, self.placeholders[GENDER])
                 self.replaced_constants[word] = self.placeholders[GENDER]
-
         return user_input
 
     def replace_numeric_constants_with_placeholders(self, user_input):
-
         if user_input is None:
             return ""
 

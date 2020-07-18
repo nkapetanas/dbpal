@@ -1,6 +1,7 @@
 from django.http import JsonResponse, HttpResponse
 
 from dbpalcore.preprocessor.preprocess import *
+from dbpalcore.postprocessor.postprocess import *
 from rest_framework.utils import json
 
 from .models import Patients
@@ -20,6 +21,7 @@ import sys
 sys.path.append('../../dbpalcore/preprocessor/preprocessor')
 
 preprocessor = Preprocessor()
+postprocessor = Postprocessor()
 
 
 class PatientsDetails(APIView):
@@ -58,13 +60,14 @@ class CombinedAPIView(APIView):
         users_input_with_placeholders = preprocessor.replace_constants_with_placeholders(users_input_cleaned)
         users_input_with_numeric_placeholders = preprocessor.replace_numeric_constants_with_placeholders(users_input_with_placeholders)
 
+        postprocessed_users_input = postprocessor.replace_placeholders_with_constants(preprocessor.replaced_constants,
+                                                                      users_input_with_numeric_placeholders)
         patients = Patients.objects.all()
-
         serializer = PatientSerializer(patients, many=True)
 
         context = {
             'patients': serializer.data,
-            'sqlResponse': users_input_with_numeric_placeholders,
+            'sqlResponse': postprocessed_users_input,
         }
 
         data = json.dumps(context, indent=4, sort_keys=True, default=str)
