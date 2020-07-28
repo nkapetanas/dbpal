@@ -1,116 +1,122 @@
 from __future__ import unicode_literals, print_function, division
 from io import open
-import unicodedata
-import string
 import re
 import random
+import time
 
 import torch
 import torch.nn as nn
 from torch import optim
-import torch.nn.functional as F
+
+from django.dbpalcore import Utils
+from .encoder import EncoderRNN
+from .attentiondecoder import AttnDecoderRNN
+from .lang import prepare_data
+from .training import train
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-SOS_token = 0  # Start of the sentence
-EOS_token = 1  # End of the sentence
+SOS_TOKEN = 0  # Start of the sentence
+EOS_TOKEN = 1  # End of the sentence
 MAX_LENGTH = 10
+LEARNING_RATE = 0.01
+HIDDEN_SIZE = 256
+NUMBER_OF_ITERATIONS = 75000
+DROPOUT = 0.1
+
+input_lang, output_lang, pairs = prepare_data('eng', 'sql', True)
 
 
-class Lang:
-    def __init__(self, name):
-        self.name = name
-        self.word2index = dict()  # Mapping word to index
-        self.word2count = dict()  # Mapping word to count
-        self.index2word = {0: "SOS", 1: "EOS"}
-        self.n_words = 2  # Count SOS and EOS
-
-    def addSentence(self, sentence):
-        for word in sentence.split(' '):  # split the sentence to the '' and then add the word
-            self.addWord(word)
-
-    def addWord(self, word):
-        if word not in self.word2index:
-            self.word2index[word] = self.n_words
-            self.word2count[word] = 1
-            self.index2word[self.n_words] = word
-            self.n_words += 1
-        else:
-            self.word2count[word] += 1
-
-
-    # Lowercase, trim, and remove non-letter characters
-    def normalizeString(self, s):
-        s = s.lower().strip()
-        s = re.sub(r"([.!?])", r" \1", s)
-        return re.sub(r"[^a-zA-Z.!?]+", r" ", s)
-
-    def readLangs(self, lang1, lang2, reverse=False):
-
-        print("Reading lines...")
-
-        # Read the file and split into lines
-        lines = open('data/%s-%s.txt' % (lang1, lang2), encoding='utf-8'). \
-            read().strip().split('\n')
-
-        # Split every line into pairs and normalize
-        pairs = [[self.normalizeString(s) for s in l.split('\t')] for l in lines]
-
-        # Reverse pairs, make Lang instances
-        if reverse:
-            pairs = [list(reversed(p)) for p in pairs]
-            input_lang = Lang(lang2)
-            output_lang = Lang(lang1)
-        else:
-            input_lang = Lang(lang1)
-            output_lang = Lang(lang2)
-
-        return input_lang, output_lang, pairs
-
-
-def filterPair(pairs):
-    return [p for p in pairs
-            if
-            len(p[0].split(' ')) < MAX_LENGTH and \
-            len(p[1].split(' ')) < MAX_LENGTH]
-
-
-def filterPairs(pairs):
-    return [pair for pair in pairs if filterPair(pair)]
-
-def prepareData(lang1, lang2, reverse=False):
-    input_lang, output_lang, pairs = readLangs(lang1, lang2, reverse)
-    print("Read %s sentence pairs" % len(pairs))
-    pairs = filterPairs(pairs)
-    print("Trimmed to %s sentence pairs" % len(pairs))
-    print("Counting words...")
-    for pair in pairs:
-        input_lang.addSentence(pair[0])
-        output_lang.addSentence(pair[1])
-    print("Counted words:")
-    print(input_lang.name, input_lang.n_words)
-    print(output_lang.name, output_lang.n_words)
-    return input_lang, output_lang, pairs
-
-
-input_lang, output_lang, pairs = prepareData('eng', 'sql', True)
-print(random.choice(pairs))
-
-
-
-
-
-def indexesFromSentence(lang, sentence):
+def indexes_from_sentence(lang, sentence):
     return [lang.word2index[word] for word in sentence.split(' ')]
 
 
-def tensorFromSentence(lang, sentence):
-    indexes = indexesFromSentence(lang, sentence)
-    indexes.append(EOS_token)
+def tensor_from_sentence(lang, sentence):
+    indexes = indexes_from_sentence(lang, sentence)
+    indexes.append(EOS_TOKEN)
     return torch.tensor(indexes, dtype=torch.long, device=device).view(-1, 1)
 
 
-def tensorsFromPair(pair):
-    input_tensor = tensorFromSentence(input_lang, pair[0])
-    target_tensor = tensorFromSentence(output_lang, pair[1])
-    return (input_tensor, target_tensor)
+def tensors_from_pair(pair):
+    input_tensor = tensor_from_sentence(input_lang, pair[0])
+    target_tensor = tensor_from_sentence(output_lang, pair[1])
+    return input_tensor, target_tensor
+
+
+def training_iterations(encoder, decoder, iteration_number, print_every=1000, plot_every=100,
+                        learning_rate=LEARNING_RATE):
+    start = time.time()
+    plot_losses = []
+    print_loss_total = 0  # Reset every print_every
+    plot_loss_total = 0  # Reset every plot_every
+
+    encoder_optimizer = optim.SGD(encoder.parameters(), lr=learning_rate)
+    decoder_optimizer = optim.SGD(decoder.parameters(), lr=learning_rate)
+    training_pairs = [tensors_from_pair(random.choice(pairs))
+                      for _ in range(iteration_number)]
+    criterion = nn.NLLLoss()
+
+    for iteration in range(1, iteration_number + 1):
+        training_pair = training_pairs[iteration - 1]
+        input_tensor = training_pair[0]
+        target_tensor = training_pair[1]
+
+        loss = train(input_tensor, target_tensor, encoder,
+                     decoder, encoder_optimizer, decoder_optimizer, criterion)
+        print_loss_total += loss
+        plot_loss_total += loss
+
+        if iteration % print_every == 0:
+            print_loss_avg = print_loss_total / print_every
+            print_loss_total = 0
+            print('%s (%d %d%%) %.4f' % (Utils.time_since(start, iteration / iteration_number),
+                                         iteration, iteration / iteration_number * 100, print_loss_avg))
+
+        if iteration % plot_every == 0:
+            plot_loss_avg = plot_loss_total / plot_every
+            plot_losses.append(plot_loss_avg)
+            plot_loss_total = 0
+
+    Utils.show_plot(plot_losses)
+
+
+def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
+    with torch.no_grad():
+        input_tensor = tensor_from_sentence(input_lang, sentence)
+        input_length = input_tensor.size()[0]
+        encoder_hidden = encoder.initHidden()
+
+        encoder_outputs = torch.zeros(max_length, encoder.hidden_size, device=device)
+
+        for ei in range(input_length):
+            encoder_output, encoder_hidden = encoder(input_tensor[ei],
+                                                     encoder_hidden)
+            encoder_outputs[ei] += encoder_output[0, 0]
+
+        decoder_input = torch.tensor([[SOS_TOKEN]], device=device)  # SOS
+
+        decoder_hidden = encoder_hidden
+
+        decoded_words = []
+        decoder_attentions = torch.zeros(max_length, max_length)
+
+        for di in range(max_length):
+            decoder_output, decoder_hidden, decoder_attention = decoder(
+                decoder_input, decoder_hidden, encoder_outputs)
+            decoder_attentions[di] = decoder_attention.data
+            topv, topi = decoder_output.data.topk(1)
+            if topi.item() == EOS_TOKEN:
+                decoded_words.append('<EOS>')
+                break
+            else:
+                decoded_words.append(output_lang.index2word[topi.item()])
+
+            decoder_input = topi.squeeze().detach()
+
+        return decoded_words, decoder_attentions[:di + 1]
+
+
+encoder = EncoderRNN(input_lang.n_words, HIDDEN_SIZE).to(device)
+attn_decoder = AttnDecoderRNN(HIDDEN_SIZE, output_lang.n_words, dropout_p=DROPOUT).to(device)
+
+training_iterations(encoder, attn_decoder, NUMBER_OF_ITERATIONS, print_every=5000)
