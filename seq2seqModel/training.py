@@ -1,5 +1,6 @@
-import torch
 import random
+
+import torch
 
 SOS_token = 0  # Start of the sentence
 EOS_token = 1  # End of the sentence
@@ -11,7 +12,6 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def train(input_tensor, target_tensor, encoder, decoder, encoder_optimizer,
           decoder_optimizer, criterion, max_length=MAX_LENGTH):
-
     encoder_hidden = encoder.initHidden()
 
     encoder_optimizer.zero_grad()

@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 from torch import optim
 
-from django.dbpalcore import Utils
+from . import Utils
 from .encoder import EncoderRNN
 from .attentiondecoder import AttnDecoderRNN
 from .lang import prepare_data
