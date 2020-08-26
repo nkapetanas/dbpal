@@ -39,17 +39,17 @@ class Lang:
             read().strip().split('\n')
 
         # Split every line into pairs and normalize
-        pairs = [[self.normalize_string(s) for s in l.split('\t')] for l in lines]
+        pairs = [[self.normalize_string(s) for s in line.split('\t')] for line in lines]
 
         # Reverse pairs, make Lang instances
         if reverse:
             pairs = [list(reversed(p)) for p in pairs]
             input_lang = Lang(lang2)
             output_lang = Lang(lang1)
-        else:
-            input_lang = Lang(lang1)
-            output_lang = Lang(lang2)
+            return input_lang, output_lang, pairs
 
+        input_lang = Lang(lang1)
+        output_lang = Lang(lang2)
         return input_lang, output_lang, pairs
 
 

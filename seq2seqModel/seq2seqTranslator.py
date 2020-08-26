@@ -24,7 +24,15 @@ HIDDEN_SIZE = 256
 NUMBER_OF_ITERATIONS = 75000
 DROPOUT = 0.1
 
+TRAINED_ENCODER_PATH = '/producedmodel/encoder.dict'
+TRAINED_DECODER_PATH = '/producedmodel/decoder.dict'
+
 input_lang, output_lang, pairs = prepare_data('eng', 'sql', True)
+
+
+def save_model(encoder, decoder):
+    torch.save(encoder.state_dict(), TRAINED_ENCODER_PATH)
+    torch.save(decoder.state_dict(), TRAINED_DECODER_PATH)
 
 
 def indexes_from_sentence(lang, sentence):
@@ -113,10 +121,13 @@ def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
 
             decoder_input = topi.squeeze().detach()
 
-        return decoded_words, decoder_attentions[:di + 1]
+        # return decoded_words, decoder_attentions[:di + 1]
+        return decoded_words
 
 
 encoder = EncoderRNN(input_lang.n_words, HIDDEN_SIZE).to(device)
 attn_decoder = AttnDecoderRNN(HIDDEN_SIZE, output_lang.n_words, dropout_p=DROPOUT).to(device)
 
 training_iterations(encoder, attn_decoder, NUMBER_OF_ITERATIONS, print_every=5000)
+
+save_model(encoder, attn_decoder)

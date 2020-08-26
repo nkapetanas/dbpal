@@ -2,6 +2,7 @@ from django.http import JsonResponse, HttpResponse
 
 from dbpalcore.preprocessor.preprocess import *
 from dbpalcore.postprocessor.postprocess import *
+from dbpalcore.neuraltranslator.seq2seqService import *
 from rest_framework.utils import json
 
 from .models import Patients
@@ -22,6 +23,7 @@ sys.path.append('../../dbpalcore/preprocessor/preprocessor')
 
 preprocessor = Preprocessor()
 postprocessor = Postprocessor()
+seq2seqService = Seq2SeqService()
 
 
 class PatientsDetails(APIView):
@@ -62,6 +64,8 @@ class CombinedAPIView(APIView):
 
         postprocessed_users_input = postprocessor.replace_placeholders_with_constants(preprocessor.replaced_constants,
                                                                       users_input_with_numeric_placeholders)
+
+        translated_query = seq2seqService.evaluate_query(postprocessed_users_input)
         patients = Patients.objects.all()
         serializer = PatientSerializer(patients, many=True)
 
