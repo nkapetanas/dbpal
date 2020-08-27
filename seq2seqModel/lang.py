@@ -1,4 +1,5 @@
 import re
+import os
 
 MAX_LENGTH = 10
 
@@ -35,7 +36,7 @@ class Lang:
         print("Reading lines...")
 
         # Read the file and split into lines
-        lines = open('data/%s-%s.txt' % (lang1, lang2), encoding='utf-8'). \
+        lines = open(os.getcwd(), '%s-%s.txt' % (lang1, lang2), encoding='utf-8'). \
             read().strip().split('\n')
 
         # Split every line into pairs and normalize

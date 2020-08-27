@@ -1,6 +1,4 @@
 from __future__ import unicode_literals, print_function, division
-from io import open
-import re
 import random
 import time
 
@@ -24,8 +22,8 @@ HIDDEN_SIZE = 256
 NUMBER_OF_ITERATIONS = 75000
 DROPOUT = 0.1
 
-TRAINED_ENCODER_PATH = '/producedmodel/encoder.dict'
-TRAINED_DECODER_PATH = '/producedmodel/decoder.dict'
+TRAINED_ENCODER_PATH = 'producedmodel/encoder.dict'
+TRAINED_DECODER_PATH = 'producedmodel/decoder.dict'
 
 input_lang, output_lang, pairs = prepare_data('eng', 'sql', True)
 

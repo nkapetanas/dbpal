@@ -58,20 +58,21 @@ class CombinedAPIView(APIView):
     def getCombinedData(request):
         searchInput = request.GET.get('searchInput')
 
-        users_input_cleaned = preprocessor.clean_users_input(searchInput)
-        users_input_with_placeholders = preprocessor.replace_constants_with_placeholders(users_input_cleaned)
-        users_input_with_numeric_placeholders = preprocessor.replace_numeric_constants_with_placeholders(users_input_with_placeholders)
+        # users_input_cleaned = preprocessor.clean_users_input(searchInput)
+        # users_input_with_placeholders = preprocessor.replace_constants_with_placeholders(users_input_cleaned)
+        # users_input_with_numeric_placeholders = preprocessor.replace_numeric_constants_with_placeholders(users_input_with_placeholders)
+        #
+        # postprocessed_users_input = postprocessor.replace_placeholders_with_constants(preprocessor.replaced_constants,
+        #                                                               users_input_with_numeric_placeholders)
 
-        postprocessed_users_input = postprocessor.replace_placeholders_with_constants(preprocessor.replaced_constants,
-                                                                      users_input_with_numeric_placeholders)
-
-        translated_query = seq2seqService.evaluate_query(postprocessed_users_input)
+        # translated_query = seq2seqService.evaluate_query(postprocessed_users_input)
+        translated_query = seq2seqService.evaluate_query(searchInput)
         patients = Patients.objects.all()
         serializer = PatientSerializer(patients, many=True)
 
         context = {
             'patients': serializer.data,
-            'sqlResponse': postprocessed_users_input,
+            'sqlResponse': translated_query,
         }
 
         data = json.dumps(context, indent=4, sort_keys=True, default=str)
