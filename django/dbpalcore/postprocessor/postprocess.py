@@ -1,3 +1,6 @@
+from django.db import connection
+
+cursor = connection.cursor()
 
 class Postprocessor:
     def replace_placeholders_with_constants(self, replaced_constants, preprocessed_users_input):
@@ -6,3 +9,8 @@ class Postprocessor:
             preprocessed_users_input = preprocessed_users_input.replace(value, key)
 
         return preprocessed_users_input
+
+    def get_query_results(self, query):
+        cursor.execute(query + ''';''')
+
+        return cursor.fetchall()

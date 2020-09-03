@@ -38,4 +38,6 @@ export class CombinedModel {
 
   result: Patient[];
   sqlResponse: string;
+  sqlResponsePreprocessor: string;
+  translatedSqlResponse: string;
 }

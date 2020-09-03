@@ -8,13 +8,21 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 SOS_TOKEN = 0  # Start of the sentence
 EOS_TOKEN = 1  # End of the sentence
-MAX_LENGTH = 10
-
-
-input_lang, output_lang, pairs = prepare_data('eng', 'sql', True)
+MAX_LENGTH = 20
 
 def indexes_from_sentence(lang, sentence):
     return [lang.word2index[word] for word in sentence.split(' ')]
+
+
+def tensorFromSentence(lang, sentence):
+    indexes = indexes_from_sentence(lang, sentence)
+    indexes.append(EOS_TOKEN)
+    return torch.tensor(indexes, dtype=torch.long, device=device).view(-1, 1)
+
+input_lang, output_lang, pairs = prepare_data('eng', 'sql')
+
+def indexes_from_sentence(lang, sentence):
+    return [lang.word2index[word.lower()] for word in sentence.split(' ')]
 
 
 def tensor_from_sentence(lang, sentence):
@@ -25,7 +33,8 @@ def tensor_from_sentence(lang, sentence):
 
 def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
     with torch.no_grad():
-        input_tensor = tensor_from_sentence(input_lang, sentence)
+        sentence_normalized = input_lang.normalize_string(sentence)
+        input_tensor = tensorFromSentence(input_lang, sentence_normalized)
         input_length = input_tensor.size()[0]
         encoder_hidden = encoder.init_hidden()
 
@@ -49,11 +58,12 @@ def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
             decoder_attentions[di] = decoder_attention.data
             topv, topi = decoder_output.data.topk(1)
             if topi.item() == EOS_TOKEN:
-                decoded_words.append('<EOS>')
+                # decoded_words.append('<EOS>')
                 break
             else:
                 decoded_words.append(output_lang.index2word[topi.item()])
 
             decoder_input = topi.squeeze().detach()
 
-        return decoded_words
+
+        return ' '.join(decoded_words)

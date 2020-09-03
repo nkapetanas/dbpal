@@ -4,7 +4,8 @@ import torch.nn.functional as f
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-MAX_LENGTH = 10
+MAX_LENGTH = 20
+
 
 class AttnDecoderRNN(nn.Module):
     def __init__(self, hidden_size, output_size, dropout_p=0.1, max_length=MAX_LENGTH):
@@ -22,7 +23,7 @@ class AttnDecoderRNN(nn.Module):
         self.out = nn.Linear(self.hidden_size, self.output_size)
 
     def forward(self, input, hidden, encoder_outputs):
-        embedded = self.embedding(input).view(1, 1, -1) # change the shape to map the shape that the GRU expects
+        embedded = self.embedding(input).view(1, 1, -1)  # change the shape to map the shape that the GRU expects
         embedded = self.dropout(embedded)
 
         attn_weights = f.softmax(

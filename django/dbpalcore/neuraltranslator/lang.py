@@ -3,7 +3,7 @@ import re
 
 from django.conf import settings
 
-MAX_LENGTH = 10
+MAX_LENGTH = 20
 
 
 class Lang:
@@ -35,10 +35,7 @@ class Lang:
 
     def read_languages(self, lang1, lang2, reverse=False):
 
-        print("Reading lines...")
-
-        # Read the file and split into lines
-        my_file = open(os.path.join(settings.BASE_DIR, 'engfra.txt'), 'r', encoding='utf-8')
+        my_file = open(os.path.join(settings.BASE_DIR, 'engsql.txt'), 'r', encoding='utf-8')
         lines = my_file.read().strip().split('\n')
 
         # Split every line into pairs and normalize
@@ -56,15 +53,13 @@ class Lang:
         return input_lang, output_lang, pairs
 
 
-def filter_pair(pairs):
-    return [p for p in pairs
-            if
-            len(p[0].split(' ')) < MAX_LENGTH and \
-            len(p[1].split(' ')) < MAX_LENGTH]
+def filterPair(pair):
+        return len(pair[0].split(' ')) < MAX_LENGTH and \
+               len(pair[1].split(' ')) < MAX_LENGTH
 
 
 def filter_pairs(pairs):
-    return [pair for pair in pairs if filter_pair(pair)]
+    return [pair for pair in pairs if filterPair(pair)]
 
 
 def prepare_data(lang1, lang2, reverse=False):

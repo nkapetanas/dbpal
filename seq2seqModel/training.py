@@ -4,7 +4,7 @@ import torch
 
 SOS_token = 0  # Start of the sentence
 EOS_token = 1  # End of the sentence
-MAX_LENGTH = 10
+MAX_LENGTH = 20
 TEACHER_FORCING_RATIO = 0.5
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

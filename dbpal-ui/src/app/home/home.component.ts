@@ -12,6 +12,10 @@ import {MessageService} from 'primeng/api';
 export class HomeComponent implements OnInit {
   sqlResponse: string;
 
+  sqlResponsePreprocessor: string;
+
+  translatedSqlResponse: string;
+
   filter: string;
 
   /**
@@ -36,9 +40,14 @@ export class HomeComponent implements OnInit {
   mapResult(response) {
     this.patients = [];
     this.sqlResponse = '';
+    this.sqlResponsePreprocessor = '';
+    this.translatedSqlResponse = '';
+
     if (response && response.result !== 0) {
       this.patients = response.patients;
       this.sqlResponse = response.sqlResponse;
+      this.sqlResponsePreprocessor = response.sqlResponsePreprocessor;
+      this.translatedSqlResponse = response.translatedSqlResponse;
     }
   }
 
