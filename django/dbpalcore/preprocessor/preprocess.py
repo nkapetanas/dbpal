@@ -65,8 +65,8 @@ class Preprocessor:
         unique_first_name_values = get_unique_column_values(FIRST_NAME_COLUMN)
         self.first_name_values_list = get_processed_values(unique_first_name_values)
 
-        unique_first_name_values = get_unique_column_values(LAST_NAME_COLUMN)
-        self.last_name_values_list = get_processed_values(unique_first_name_values)
+        unique_last_name_values = get_unique_column_values(LAST_NAME_COLUMN)
+        self.last_name_values_list = get_processed_values(unique_last_name_values)
 
         self.gender = ["male", "femal"]
         self.replaced_constants = dict()
@@ -99,6 +99,10 @@ class Preprocessor:
             elif word in self.gender:
                 user_input = user_input.replace(word, self.placeholders[GENDER])
                 self.replaced_constants[word] = self.placeholders[GENDER]
+
+            elif word in self.diagnosis_values_list:
+                user_input = user_input.replace(word, self.placeholders[DIAGNOSIS_COLUMN])
+                self.replaced_constants[word] = self.placeholders[DIAGNOSIS_COLUMN]
         return user_input
 
     def replace_numeric_constants_with_placeholders(self, user_input):

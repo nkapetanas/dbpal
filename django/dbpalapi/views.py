@@ -67,14 +67,14 @@ class CombinedAPIView(APIView):
         postprocessed_users_input = postprocessor.replace_placeholders_with_constants(preprocessor.replaced_constants,
                                                                       translated_query)
 
-        query_results = postprocessor.get_query_results(postprocessed_users_input)
+        # query_results = postprocessor.get_query_results(postprocessed_users_input)
         # patients = Patients.objects.all()
-        # patients = Patients.objects.raw(postprocessed_users_input + ''';''')
+        patients = Patients.objects.raw(postprocessed_users_input + ''';''')
         # serializer = PatientSerializer(patients, many=True)
 
         context = {
             # 'patients': serializer.data,
-            'patients': query_results[0],
+            'patients': patients,
             'sqlResponsePreprocessor': users_input_with_numeric_placeholders,
             'translatedSqlResponse': translated_query,
             'sqlResponse': postprocessed_users_input,

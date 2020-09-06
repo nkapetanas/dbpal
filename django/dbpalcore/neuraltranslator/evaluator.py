@@ -66,4 +66,4 @@ def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
             decoder_input = topi.squeeze().detach()
 
 
-        return ' '.join(decoded_words)
+        return ' '.join(decoded_words).upper()
