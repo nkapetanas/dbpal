@@ -15,15 +15,16 @@ from .permissions import IsCreator
 from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
 from .utils import get_auth0_user_id_from_request
+from .ProcessQueryService import *
 
 from .serializers import PatientSerializer
 import sys
 
 sys.path.append('../../dbpalcore/preprocessor/preprocessor')
 
-preprocessor = Preprocessor()
-postprocessor = Postprocessor()
-seq2seqService = Seq2SeqService()
+# preprocessor = Preprocessor()
+# postprocessor = Postprocessor()
+# seq2seqService = Seq2SeqService()
 
 
 class PatientsDetails(APIView):
@@ -41,7 +42,7 @@ class PatientsDetails(APIView):
         serializer = PatientSerializer(patients, many=True)
         return Response(serializer.data)
 
-    def getData(self, search_input):
+    def getData(self):
         try:
             unique_db_columns_names = get_unique_db_columns()
             db_column_names = []
@@ -58,23 +59,11 @@ class CombinedAPIView(APIView):
     def getCombinedData(request):
         searchInput = request.GET.get('searchInput')
 
-        users_input_cleaned = preprocessor.clean_users_input(searchInput)
-        users_input_with_placeholders = preprocessor.replace_constants_with_placeholders(users_input_cleaned)
-        users_input_with_numeric_placeholders = preprocessor.replace_numeric_constants_with_placeholders(users_input_with_placeholders)
-
-        translated_query = seq2seqService.evaluate_query(users_input_with_numeric_placeholders)
-
-        postprocessed_users_input = postprocessor.replace_placeholders_with_constants(preprocessor.replaced_constants,
-                                                                      translated_query)
-
-        # query_results = postprocessor.get_query_results(postprocessed_users_input)
-        # patients = Patients.objects.all()
-        patients = Patients.objects.raw(postprocessed_users_input + ''';''')
-        # serializer = PatientSerializer(patients, many=True)
+        users_input_with_numeric_placeholders, translated_query, postprocessed_users_input, patients = preprocess_query(searchInput)
+        serializer = PatientSerializer(patients, many=True)
 
         context = {
-            # 'patients': serializer.data,
-            'patients': patients,
+            'patients': serializer.data,
             'sqlResponsePreprocessor': users_input_with_numeric_placeholders,
             'translatedSqlResponse': translated_query,
             'sqlResponse': postprocessed_users_input,

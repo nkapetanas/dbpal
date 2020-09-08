@@ -39,7 +39,12 @@ class Lang:
         lines = my_file.read().strip().split('\n')
 
         # Split every line into pairs and normalize
-        pairs = [[self.normalize_string(s) for s in line.split('\t')] for line in lines]
+        pairs = list()
+        for l in lines:
+            s = l.split('\t')
+            s[0] = self.normalize_string(s[0])
+            s[1] = s[1].lower()
+            pairs.append(s)
 
         # Reverse pairs, make Lang instances
         if reverse:

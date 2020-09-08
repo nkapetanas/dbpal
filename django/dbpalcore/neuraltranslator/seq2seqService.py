@@ -16,8 +16,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def model_initialization():
     # input_lang.n_words
     # output_lang.n_words
-    encoder = EncoderRNN(301, HIDDEN_SIZE).to(device)
-    attn_decoder = AttnDecoderRNN(HIDDEN_SIZE, 156, dropout_p=DROPOUT).to(device)
+    encoder = EncoderRNN(595, HIDDEN_SIZE).to(device)
+    attn_decoder = AttnDecoderRNN(HIDDEN_SIZE, 170, dropout_p=DROPOUT).to(device)
 
     encoder.load_state_dict(torch.load(os.path.join(settings.BASE_DIR, ENCODER_PATH)))
     attn_decoder.load_state_dict(torch.load(os.path.join(settings.BASE_DIR, DECODER_PATH)))
