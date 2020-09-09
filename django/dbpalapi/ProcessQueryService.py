@@ -17,6 +17,6 @@ def preprocess_query(searchInput):
     postprocessed_users_input = postprocessor.replace_placeholders_with_constants(preprocessor.replaced_constants,
                                                                           translated_query)
 
-    patients = Patients.objects.raw(postprocessed_users_input + ''';''')
+    patients = Patients.objects.raw(postprocessed_users_input.lower() + ''';''')
 
     return users_input_with_numeric_placeholders, translated_query, postprocessed_users_input, patients
