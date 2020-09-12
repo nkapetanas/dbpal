@@ -9,10 +9,10 @@ MAX_LENGTH = 20
 class Lang:
     def __init__(self, name):
         self.name = name
-        self.word2index = dict()  # Mapping word to index
-        self.word2count = dict()  # Mapping word to count
-        self.index2word = {0: "SOS", 1: "EOS"}
-        self.n_words = 2  # Count SOS and EOS
+        self.word2index = {"unknown": 0}
+        self.word2count = {"unknown": 0}
+        self.index2word = {0: "SOS", 1: "EOS", 3: "unknown"}
+        self.n_words = 3  # Count SOS and EOS
 
     def add_sentence(self, sentence):
         for word in sentence.split(' '):  # split the sentence to the '' and then add the word

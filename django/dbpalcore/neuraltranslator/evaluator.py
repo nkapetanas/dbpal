@@ -11,7 +11,7 @@ EOS_TOKEN = 1  # End of the sentence
 MAX_LENGTH = 20
 
 def indexes_from_sentence(lang, sentence):
-    return [lang.word2index[word] for word in sentence.split(' ')]
+    return [lang.word2index.get(word) for word in sentence.split(' ')]
 
 
 def tensorFromSentence(lang, sentence):
@@ -22,7 +22,17 @@ def tensorFromSentence(lang, sentence):
 input_lang, output_lang, pairs = prepare_data('eng', 'sql')
 
 def indexes_from_sentence(lang, sentence):
-    return [lang.word2index[word.lower()] for word in sentence.split(' ')]
+
+    indexes = list()
+    for word in sentence.split(' '):
+        index = lang.word2index.get(word.lower())
+        if index is None:
+            indexes.append(0)
+            continue
+
+        indexes.append(index)
+
+    return indexes
 
 
 def tensor_from_sentence(lang, sentence):

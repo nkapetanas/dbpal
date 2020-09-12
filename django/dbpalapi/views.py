@@ -15,7 +15,7 @@ from .permissions import IsCreator
 from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
 from .utils import get_auth0_user_id_from_request
-from .ProcessQueryService import *
+from .processqueryservice import *
 
 from .serializers import PatientSerializer
 import sys
