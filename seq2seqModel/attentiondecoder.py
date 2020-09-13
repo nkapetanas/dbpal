@@ -25,19 +25,19 @@ class AttnDecoderRNN(nn.Module):
         embedded = self.embedding(input).view(1, 1, -1) # change the shape to map the shape that the GRU expects
         embedded = self.dropout(embedded)
 
-        attn_weights = f.softmax(
+        attention_weights = f.softmax(
             self.attn(torch.cat((embedded[0], hidden[0]), 1)), dim=1)
-        attn_applied = torch.bmm(attn_weights.unsqueeze(0),
+        attention_applied = torch.bmm(attention_weights.unsqueeze(0),
                                  encoder_outputs.unsqueeze(0))
 
-        output = torch.cat((embedded[0], attn_applied[0]), 1)
+        output = torch.cat((embedded[0], attention_applied[0]), 1)
         output = self.attn_combine(output).unsqueeze(0)
 
         output = f.relu(output)
         output, hidden = self.gru(output, hidden)
 
         output = f.log_softmax(self.out(output[0]), dim=1)
-        return output, hidden, attn_weights
+        return output, hidden, attention_weights
 
     def initHidden(self):
         return torch.zeros(1, 1, self.hidden_size, device=device)
