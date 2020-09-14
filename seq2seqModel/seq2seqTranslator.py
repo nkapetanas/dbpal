@@ -16,11 +16,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 SOS_TOKEN = 0  # Start of the sentence
 EOS_TOKEN = 1  # End of the sentence
-MAX_LENGTH = 10
+MAX_LENGTH = 20
 LEARNING_RATE = 0.01
 HIDDEN_SIZE = 256
-NUMBER_OF_ITERATIONS = 75000
-DROPOUT = 0.1
+NUMBER_OF_ITERATIONS = 80000
+DROPOUT = 0.2
 
 TRAINED_ENCODER_PATH = 'producedmodel/encoder.dict'
 TRAINED_DECODER_PATH = 'producedmodel/decoder.dict'

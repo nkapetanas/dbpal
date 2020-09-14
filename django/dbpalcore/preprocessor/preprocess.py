@@ -16,6 +16,8 @@ PLACEHOLDER_SIGN = '@'
 DIAGNOSIS_COLUMN = 'diagnosis'
 FIRST_NAME_COLUMN = 'first_name'
 LAST_NAME_COLUMN = 'last_name'
+FIRST_NAME_PLACEHOLDER = 'first'
+LAST_NAME_PLACEHOLDER = 'last'
 GENDER = 'gender'
 AGE = 'age'
 LENGTH_OF_STAY = 'length of stay'
@@ -40,6 +42,12 @@ def create_place_holders_from_db(unique_db_columns):
     placeholders = dict()
     for column in unique_db_columns:
         placeholders[column[0]] = PLACEHOLDER_SIGN + column[0].upper()
+
+    placeholders["first_name"] = "@FIRST"
+    placeholders["last_name"] = "@LAST"
+    for key, value in placeholders.items():
+        print(key)
+        print(value)
 
     return placeholders
 
@@ -82,6 +90,8 @@ class Preprocessor:
         return " ".join(stemmed_words)
 
     def replace_constants_with_placeholders(self, user_input):
+        self.replaced_constants = dict()
+
         if user_input is None:
             return ""
 
