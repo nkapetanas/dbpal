@@ -21,7 +21,7 @@ class TS_Builder:
 		tablename = "patients"
 		sql_fields = ["id", "first_name", "last_name", "diagnosis", "gender", "length_of_stay", "age"]
 		nl_fields = {"id" :"ids", "first_name" : "name", "last_name": "surname", "diagnosis" : "disease", "gender" : "gender", "length_of_stay" : "hospilization period", "age" : "age"}
-		annot = {"id" : "@ID", "first_name" : "@FIRST_NAME", "last_name" : "@LAST_NAME", "diagnosis" : "@DIAGNOSIS", "gender" : "@GENDER", "length_of_stay" : "@LENGTH_OF_STAY", "age" : "@AGE"}
+		annot = {"id" : "@ID", "first_name" : "@FIRST", "last_name" : "@LAST", "diagnosis" : "@DIAGNOSIS", "gender" : "@GENDER", "length_of_stay" : "@LENGTH_OF_STAY", "age" : "@AGE"}
 		
 		sql_from = "SELECT sclause FROM table"
 		sql_where = "SELECT sclause FROM table WHERE wclause"
