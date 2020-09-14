@@ -40,6 +40,7 @@ Next, in that anaconda environment(terminal) navigate to the directory of dbpal 
 That will start the back end service. If you are running Docker in Windows Home and you installed Docker Toolbox on Windows, you should first start the Docker engine
 from there, get the IP that will be produced and change from localhost 0.0.0.0 to the IP produced in the file dbpal/django/dbpalproj/settings_dev.py, where it says DATABASES --> HOST (line 98). In this way, the Django will be able to "see" the docker service that is running.
 
+Download the engsql.txt that was used for training from link https://1drv.ms/t/s!AvtMSAl72kBFlXAm2p1baDAM5sKp?e=Gavgfk and place it in the django directory, together with the already existing files encoder.dict and decoder.dict .
 When no errors are shown in the terminal where we run the django server, and the the UI part is up(ng serve in the UI configuration), we can navigate to http://localhost:4200/ and start submitting queries.
 
 
